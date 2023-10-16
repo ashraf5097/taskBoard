@@ -1,23 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 
-function FormDialog({ handleClose, open }) {
+function FormDialog({ handleClose, open, title, handleSave }) {
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    deadline: "",
+  });
+
+  useEffect(() => {
+    setFormData({
+      name: "",
+      description: "",
+      deadline: "",
+    });
+  }, [open]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   return (
     <div id="form-dialog">
       <Dialog
-        onClose={handleClose}
+        // onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Modal title
+          {title}
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -32,28 +54,49 @@ function FormDialog({ handleClose, open }) {
           <CloseIcon />
         </IconButton>
         <DialogContent dividers>
-          <Typography gutterBottom>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-            ac consectetur ac, vestibulum at eros.
-          </Typography>
-          <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-            Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor
-            auctor.
-          </Typography>
-          <Typography gutterBottom>
-            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo
-            cursus magna, vel scelerisque nisl consectetur et. Donec sed odio
-            dui. Donec ullamcorper nulla non metus auctor fringilla.
-          </Typography>
+          <DialogContent>
+            <TextField
+              fullWidth
+              label="Name"
+              name="name"
+              sx={{ paddingBottom: "30px" }}
+              value={formData.name}
+              onChange={handleChange}
+            />
+            <TextField
+              fullWidth
+              label="Description"
+              name="description"
+              sx={{ paddingBottom: "30px" }}
+              value={formData.description}
+              onChange={handleChange}
+            />
+            <TextField
+              fullWidth
+              label="Deadline"
+              name="deadline"
+              value={formData.deadline}
+              onChange={handleChange}
+            />
+          </DialogContent>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            Cancel changes
+          <Button
+            autoFocus
+            onClick={handleClose}
+            color="primary"
+            variant="contained"
+            sx={{ marginRight: "20px" }}
+          >
+            Cancel
           </Button>
-          <Button autoFocus onClick={handleClose}>
-            Save changes
+          <Button
+            autoFocus
+            onClick={() => handleSave(formData)}
+            variant="contained"
+            sx={{ marginRight: "10px" }}
+          >
+            Save
           </Button>
         </DialogActions>
       </Dialog>
